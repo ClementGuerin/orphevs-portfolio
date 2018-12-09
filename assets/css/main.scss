@@ -1,0 +1,21 @@
+/*
+  Main Scss directory
+*/
+
+// Utils
+@import "utils/variables";
+@import "utils/mixins";
+@import "utils/classes";
+
+// Common
+@import "common/fonts";
+@import "common/normalize";
+@import "common/global";
+
+// Components
+@import "components/navbar";
+
+// Pages
+@import "pages/index";
+@import "pages/project";
+@import "pages/about";

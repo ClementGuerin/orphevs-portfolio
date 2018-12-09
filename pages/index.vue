@@ -1,65 +1,74 @@
 <template>
   <section class="container">
-    <div>
-      <app-logo/>
-      <h1 class="title">
-        orphevs
-      </h1>
-      <h2 class="subtitle">
-        Orphevs's portfolio
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green">Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey">GitHub</a>
-      </div>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <i class="fab fa-twitter"></i>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
+    <ul v-for="project in filteredList" :key="project.id">
+      <li>
+        <b>Title :</b>
+        {{project.title}}
+      </li>
+      <li>
+        <b>Description :</b>
+        {{project.description}}
+      </li>
+      <li>
+        <img :src="project.thumbnail.url" alt="thumbnail project">
+      </li>
+    </ul>
   </section>
 </template>
 
 <script>
-import AppLogo from '~/components/AppLogo.vue'
-
+import Strapi from "strapi-sdk-javascript/build/main";
+const apiUrl = process.env.API_URL || "http://localhost:1337";
+const strapi = new Strapi(apiUrl);
 export default {
-  components: {
-    AppLogo
+  data() {
+    return {
+      query: ""
+    };
+  },
+  computed: {
+    filteredList() {
+      return this.projects.filter(project => {
+        return project.title.toLowerCase().includes(this.query.toLowerCase());
+      });
+    },
+    projects() {
+      return this.$store.getters["projects/list"];
+    }
+  },
+  async fetch({ store }) {
+    store.commit("projects/emptyList");
+    const response = await strapi.request("post", "/graphql", {
+      data: {
+        query: `query {
+            projects {
+              _id
+              title
+              description
+              thumbnail {
+                url
+              }
+            }
+          }
+          `
+      }
+    });
+    response.data.projects.forEach(project => {
+      project.thumbnail.url = `${apiUrl}${project.thumbnail.url}`;
+      store.commit("projects/add", {
+        id: project.id || project._id,
+        ...project
+      });
+    });
   }
-}
+};
 </script>
 
 <style>
-.container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
 </style>
-
