@@ -1,24 +1,39 @@
 <template>
-  <section class="container">
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      <i class="fab fa-twitter"></i>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
+  <section class="index">
+    <div v-swiper:mySwiper="swiperOption">
+      <div class="swiper-wrapper projects-list">
+        <div
+          class="swiper-slide"
+          v-for="(project,index) in filteredList"
+          :key="project.id"
+          :slug="project.slug"
+          @click="openProject"
+        >
+          <img class="project-thumbnail" :src="project.thumbnail.url">
+          <span class="project-counter">{{ ('0' + (index+1)).slice(-2) }}</span>
+          <h3 class="project-title">{{ project.title }}</h3>
+          <h5 class="project-category">{{ project.category }}</h5>
+        </div>
+      </div>
     </div>
-    <ul v-for="project in filteredList" :key="project.id">
-      <li>
-        <b>Title :</b>
-        {{project.title}}
-      </li>
-      <li>
-        <b>Description :</b>
-        {{project.description}}
-      </li>
-      <li>
-        <img :src="project.thumbnail.url" alt="thumbnail project">
-      </li>
-    </ul>
+    <div class="project-widgets">
+      <div class="left">
+        <div class="project-counter">
+          <div class="project-counter-active">{{ projectCounter }}</div>
+          <div class="project-counter-total">{{ ('0' + filteredList.length).slice(-2) }}</div>
+        </div>
+      </div>
+      <div class="right">
+        <div class="project-actions">
+          <a class="project-action-prev" @click="changeProject('prev')">
+            <i class="fas fa-angle-left"></i>
+          </a>
+          <a class="project-action-next" @click="changeProject('next')">
+            <i class="fas fa-angle-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -29,8 +44,46 @@ const strapi = new Strapi(apiUrl);
 export default {
   data() {
     return {
-      query: ""
+      query: "",
+      projectCounter: "01",
+      swiperOption: {
+        speed: 800,
+        grabCursor: true,
+        centeredSlides: true,
+        spaceBetween: 115,
+        slideToClickedSlide: true,
+        roundLengths: true,
+        slidesPerView: "auto",
+        mousewheel: {
+          eventsTarged: "body"
+        },
+        keyboard: {
+          enabled: true
+        },
+        effect: "coverflow",
+        coverflowEffect: {
+          rotate: 50,
+          stretch: 0,
+          depth: 100,
+          modifier: 1,
+          slideShadows: true
+        }
+      }
     };
+  },
+  mounted: function() {
+    const self = this;
+
+    this.resizeProjects();
+    this.updateProjectCounter();
+
+    $(window).resize(function() {
+      self.resizeProjects();
+    });
+
+    this.mySwiper.on("slideChange", function() {
+      self.updateProjectCounter();
+    });
   },
   computed: {
     filteredList() {
@@ -42,6 +95,45 @@ export default {
       return this.$store.getters["projects/list"];
     }
   },
+  methods: {
+    changeProject: function(state) {
+      switch (state) {
+        case "prev":
+          this.mySwiper.slidePrev();
+          break;
+        case "next":
+          this.mySwiper.slideNext();
+          break;
+      }
+    },
+    openProject: function() {
+      const self = this;
+      const target = event.target.offsetParent.getAttribute("slug");
+      let wait = setTimeout(function() {
+        self.$router.push({
+          name: "project-id",
+          params: { id: target }
+        });
+      }, 0);
+    },
+    updateProjectCounter: function() {
+      const self = this;
+
+      let wait = setTimeout(function() {
+        let indexProject = self.mySwiper.activeIndex;
+        let zero = indexProject < 10 ? "0" : null;
+
+        self.projectCounter = zero + (indexProject + 1);
+      }, 100);
+    },
+    resizeProjects: function() {
+      let el = $(".projects-list");
+      el.parent().css({
+        position: "relative",
+        top: window.innerHeight / 2 - el.height() / 2
+      });
+    }
+  },
   async fetch({ store }) {
     store.commit("projects/emptyList");
     const response = await strapi.request("post", "/graphql", {
@@ -49,8 +141,9 @@ export default {
         query: `query {
             projects {
               _id
+              slug
               title
-              description
+              category
               thumbnail {
                 url
               }
@@ -69,6 +162,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>

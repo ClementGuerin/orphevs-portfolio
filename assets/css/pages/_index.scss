@@ -1,1 +1,139 @@
 // Index page
+
+section.index {
+  .swiper-container {
+    overflow: inherit;
+  }
+
+  .projects-list {
+    .swiper-slide {
+      width: 680px;
+      max-width: 100%;
+      height: calc(680px/1.78);
+
+      .project-thumbnail {
+        width: 100%;
+        height: 100%;
+      }
+
+      .project-counter {
+        @include font-primary(200);
+        font-size: 60px;
+        color: $color-text;
+        position: absolute;
+        top: -45px;
+        left: 20px;
+        opacity: 0;
+        transition: 0.8s;
+      }
+
+      .project-title {
+        @include font-primary(600);
+        font-size: 32px;
+        color: $color-text;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        opacity: 0;
+        transition: 0.8s;
+      }
+
+      .project-category {
+        @include font-primary(400);
+        font-size: 14px;
+        opacity: 0;
+        transition: 0.8s;
+      }
+
+    }
+
+    .swiper-slide-active {
+
+      .project-counter,
+      .project-title {
+        opacity: 1;
+        transition: 0.8s;
+      }
+
+      .project-category {
+        opacity: 0.3;
+        transition: 0.8s;
+      }
+    }
+  }
+
+  .project-widgets {
+    position: fixed;
+    display: flex;
+    width: 100%;
+    bottom: 30px;
+    align-content: space-between;
+
+    .left {
+      width: 100%;
+
+      .project-counter {
+        margin-left: 30px;
+
+        .project-counter-active {
+          @include font-primary(500);
+          font-size: 14px;
+          line-height: 27px;
+          text-align: center;
+          height: 28px;
+          width: 30px;
+          border: solid 1px $color-text;
+        }
+
+        .project-counter-total {
+          @include font-primary(700);
+          color: $color-background;
+          font-size: 15px;
+          line-height: 28px;
+          text-align: center;
+          height: 28px;
+          width: 30px;
+          background: $color-text
+        }
+      }
+    }
+
+    .right {
+      .project-actions {
+        margin-right: 30px;
+        display: inline-flex;
+        margin-top: 6px;
+
+        .project-action-prev,
+        .project-action-next {
+          cursor: pointer;
+          height: 42px;
+          width: 42px;
+          border: solid 1px $color-text;
+          border-radius: 100%;
+          line-height: 40px;
+          font-size: 20px;
+          color: $color-text;
+          display: inline-block;
+          margin: 0 7px;
+          text-align: center;
+          transition: 0.2s;
+
+          i.fa-angle-left {
+            position: relative;
+            left: -1px;
+          }
+
+          i.fa-angle-right {
+            position: relative;
+            left: 1px;
+          }
+
+          &:hover {
+            background: $color-text;
+            color: $color-background;
+          }
+        }
+      }
+    }
+  }
+}

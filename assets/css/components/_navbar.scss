@@ -1,1 +1,43 @@
 // Navbar
+
+section.navbar {
+  width: 100%;
+  display: flex;
+  align-content: space-between;
+  padding: 30px;
+  position: relative;
+  z-index: 2;
+
+  .left {
+    .logo {
+      @include font-primary(700);
+      font-size: 20px;
+      letter-spacing: 5px;
+
+      a {
+        color: $color-text;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+  .right {
+    .btn-menu {
+      display: block;
+      position: relative;
+      cursor: pointer;
+      padding: 5px;
+
+      span {
+        width: 23px;
+        height: 2px;
+        display: block;
+        background: $color-text;
+        margin-bottom: 5px;
+      }
+    }
+  }
+}

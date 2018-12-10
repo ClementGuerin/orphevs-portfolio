@@ -3,7 +3,7 @@ module.exports = {
    ** Headers of the page
    */
   head: {
-    title: 'orphevs',
+    title: 'Orphevs Portfolio',
     meta: [{
         charset: 'utf-8'
       },
@@ -57,12 +57,20 @@ module.exports = {
    ** Customize the progress bar color
    */
   loading: {
-    color: '#3B8070'
+    color: '#fff'
   },
+  /*
+   ** Add plugin
+   */
+  plugins: [{
+    src: '~/plugins/swiper.js',
+    ssr: false
+  }],
   /*
    ** Build CSS/SCSS/SASS local files
    */
   css: [
+    'swiper/dist/css/swiper.css',
     '@/assets/css/main.scss'
   ],
   /*
