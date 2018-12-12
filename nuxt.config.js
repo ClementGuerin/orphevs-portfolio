@@ -65,6 +65,9 @@ module.exports = {
   plugins: [{
     src: '~/plugins/swiper.js',
     ssr: false
+  }, {
+    src: '~/plugins/moment.js',
+    ssr: false
   }],
   /*
    ** Build CSS/SCSS/SASS local files

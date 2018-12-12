@@ -1,24 +1,42 @@
 <template>
   <section class="project-page">
     <div class="header" :style="headerBackground"></div>
-    <div class="content">
-      <div class="container">
-        <h1>{{ project.title }}</h1>
-        <h3>{{ project.category }}</h3>
-        <p>{{ project.description }}</p>
+    <div class="page">
+      <div class="content">
+        <div class="container">
+          <div class="head-content row justify-content-between">
+            <div class="col-md-4">
+              <h1 class="project-title">{{ project.title }}</h1>
+              <ul class="project-list">
+                <li>Type : {{ project.category }}</li>
+                <li>
+                  <span>Date :</span>
+                  <span>{{ project.created_at | moment("MMMM YYYY") }}</span>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-7">
+              <vue-markdown class="project-description">{{ project.description }}</vue-markdown>
+            </div>
+          </div>
+          <div class="body-content" v-for="image in project.gallery" :key="image.id">
+            <img class="img-fluid" :src="image.url" :alt="image.id">
+          </div>
+        </div>
       </div>
+      <div class="next-project">Projet suivant</div>
     </div>
   </section>
 </template>
 
 <script>
+import VueMarkdown from "vue-markdown";
 import Strapi from "strapi-sdk-javascript/build/main";
 const apiUrl = process.env.API_URL || "http://localhost:1337";
 const strapi = new Strapi(apiUrl);
 export default {
   data() {
     return {
-      query: "",
       project: this.$store.getters["projects/list"][0]
     };
   },
@@ -27,7 +45,15 @@ export default {
       return this.$route.params.id;
     },
     headerBackground() {
-      return "background-image: url(" + this.project.thumbnail.url + ");";
+      var result;
+
+      if (this.project.header) {
+        result = `background-image: url("${this.project.header.url}");`;
+      } else {
+        result = null;
+      }
+
+      return result;
     }
   },
   async fetch({ store, params }) {
@@ -45,7 +71,14 @@ export default {
               title
               category
               description
+              created_at
               thumbnail {
+                url
+              }
+              header {
+                url
+              }
+              gallery {
                 url
               }
             }
@@ -54,12 +87,25 @@ export default {
       }
     });
     response.data.projects.forEach(project => {
-      project.thumbnail.url = `${apiUrl}${project.thumbnail.url}`;
+      if (project.thumbnail) {
+        project.thumbnail.url = `${apiUrl}${project.thumbnail.url}`;
+      }
+      if (project.header) {
+        project.header.url = `${apiUrl}${project.header.url}`;
+      }
+      if (project.gallery) {
+        project.gallery.forEach(image => {
+          image.url = `${apiUrl}${image.url}`;
+        });
+      }
       store.commit("projects/add", {
         id: project.id || project._id,
         ...project
       });
     });
+  },
+  components: {
+    VueMarkdown
   }
 };
 </script>

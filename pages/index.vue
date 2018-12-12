@@ -139,7 +139,9 @@ export default {
     const response = await strapi.request("post", "/graphql", {
       data: {
         query: `query {
-            projects {
+            projects(where: {
+              show: true
+            }) {
               _id
               slug
               title
