@@ -5,7 +5,7 @@ section.navbar {
   display: flex;
   align-content: space-between;
   padding: 30px;
-  position: relative;
+  position: fixed;
   z-index: 2;
 
   .left {
