@@ -82,5 +82,66 @@
       text-align: center;
       margin-bottom: 80px;
     }
+
+    .form {
+      .email {
+        @include font-primary(500);
+        color: $color-text;
+        background: transparent;
+        width: 100%;
+        border: 0;
+        border-bottom: solid 2px rgba(255, 255, 255, 0.25);
+        transition: 0.2s;
+        padding: 10px;
+        margin-bottom: 60px;
+
+        &:focus {
+          outline: none;
+          border-bottom: solid 2px rgba(255, 255, 255, 1);
+        }
+      }
+
+      .message {
+        @include font-primary(500);
+        color: $color-text;
+        background: transparent;
+        width: 100%;
+        min-height: 250px;
+        border: 0;
+        border-bottom: solid 2px rgba(255, 255, 255, 0.25);
+        transition: 0.2s;
+        padding: 10px;
+
+        &:focus {
+          outline: none;
+          border-bottom: solid 2px rgba(255, 255, 255, 1);
+        }
+      }
+
+      .send {
+        text-align: center;
+        margin-top: 80px;
+
+        .btn-send {
+          @include font-primary(600);
+          padding: 20px 50px;
+          opacity: 0.25;
+          background: transparent;
+          color: $color-text;
+          border: solid 3px rgba(255, 255, 255, 0.5);
+          transition: 0.2s;
+          cursor: pointer;
+
+          &:focus {
+            outline: none;
+          }
+
+          &:hover {
+            opacity: 1;
+            border: solid 3px rgba(255, 255, 255, 1);
+          }
+        }
+      }
+    }
   }
 }
