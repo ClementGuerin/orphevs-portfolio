@@ -32,14 +32,23 @@
         <h2 class="title">Contact me</h2>
         <div class="form row justify-content-center">
           <div class="col-md-6">
-            <input type="email" class="email" placeholder="Your email adress" v-bind="email.adress">
+            <input
+              type="email"
+              class="email"
+              name="email"
+              placeholder="Your email adress"
+              v-model="email.adress"
+            >
             <textarea
               class="message"
+              name="message"
               placeholder="Type your message here..."
-              v-bind="email.message"
+              v-model="email.message"
             ></textarea>
             <div class="send">
-              <button class="btn-send" @click="sendMail">Send this message</button>
+              <vue-recaptcha :sitekey="sitekey" @verify="onVerify">
+                <button class="btn-send">Send this message</button>
+              </vue-recaptcha>
             </div>
           </div>
         </div>
@@ -50,15 +59,18 @@
 
 <script>
 import VueMarkdown from "vue-markdown";
-import Strapi from "strapi-sdk-javascript/build/main";
+import VueRecaptcha from "vue-recaptcha";
+import Strapi from "strapi-sdk-javascript";
+import axios from "axios";
 const apiUrl = process.env.API_URL || "http://localhost:1337";
 const strapi = new Strapi(apiUrl);
-const email = {};
+const emailInfos = {};
 
 export default {
   data() {
     return {
       about: this.$store.getters["about/list"][0],
+      sitekey: "6LdjX4EUAAAAAPmAPkwZlnXMcmQ3X-l-NVLG5UUF",
       email: {
         adress: "",
         message: ""
@@ -66,25 +78,44 @@ export default {
     };
   },
   methods: {
+    onVerify: function(response) {
+      if (response) {
+        this.sendMail();
+      }
+    },
     async sendMail() {
+      emailInfos.to = this.about.email;
+      emailInfos.from = this.email.adress;
+      emailInfos.body = this.email.message;
+
       try {
-        email.to = this.about.email;
-        email.from = this.email.adress;
-        email.text = this.email.message;
-
-        console.log(strapi, "strapi");
-        console.log(strapi.services, "strapi-services");
-
-        const reponse = await strapi.services.email.send({
-          to: email.to,
-          from: email.from,
-          replyTo: email.from,
-          subject: "ORPHEVS.fr - Vous avez reçu un nouveau message",
-          text: email.text
+        const reponse = await strapi.request("post", "/email", {
+          data: {
+            to: emailInfos.to,
+            from: emailInfos.from,
+            replyTo: emailInfos.from,
+            subject: "ORPHEVS - Nouveau message",
+            text: emailInfos.body
+          }
         });
       } catch (err) {
-        console.error(err.message || "An error occurred.");
+        alert(err);
+        console.log(options);
       }
+
+      // axios
+      //   .post("https://orphevs.fr/mail.php", {
+      //     to: emailInfos.to,
+      //     from: emailInfos.from,
+      //     subject: "ORPHEVS - Nouveau message",
+      //     message: emailInfos.body
+      //   })
+      //   .then(function(response) {
+      //     console.log(response);
+      //   })
+      //   .catch(function(error) {
+      //     alert(error);
+      //   });
     }
   },
   async fetch({ store, params }) {
@@ -118,7 +149,8 @@ export default {
     });
   },
   components: {
-    VueMarkdown
+    VueMarkdown,
+    VueRecaptcha
   }
 };
 </script>

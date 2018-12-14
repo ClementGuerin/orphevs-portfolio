@@ -122,6 +122,10 @@
         text-align: center;
         margin-top: 80px;
 
+        .grecaptcha-badge {
+          display: none;
+        }
+
         .btn-send {
           @include font-primary(600);
           padding: 20px 50px;
