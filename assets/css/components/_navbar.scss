@@ -27,9 +27,11 @@ section.navbar {
   .right {
     .btn-menu {
       display: block;
-      position: relative;
+      position: absolute;
       cursor: pointer;
       padding: 5px;
+      top: 30px;
+      right: 30px;
 
       span {
         width: 23px;
@@ -37,7 +39,25 @@ section.navbar {
         display: block;
         background: $color-text;
         margin-bottom: 5px;
+        transition: 0.2s;
+      }
+
+      &:hover {
+
+        span {
+          margin-bottom: 7px;
+          transition: 0.2s;
+        }
       }
     }
+  }
+
+  .menuAnimation {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
   }
 }
