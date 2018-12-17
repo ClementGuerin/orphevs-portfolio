@@ -24,7 +24,9 @@
           </div>
         </div>
       </div>
-      <div class="next-project">Projet suivant</div>
+      <div class="next-project">
+        <nuxt-link to="/">Back to Home</nuxt-link>
+      </div>
     </div>
   </section>
 </template>

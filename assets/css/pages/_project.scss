@@ -8,12 +8,21 @@
     position: fixed;
     background-size: cover;
     background-position: top center;
+
+    @include responsive-below(sm) {
+      height: 200px;
+      margin-top: 15px;
+    }
   }
 
   .page {
     position: absolute;
     top: 500px;
     width: 100%;
+
+    @include responsive-below(sm) {
+      top: 200px;
+    }
   }
 
   .content {
@@ -66,6 +75,15 @@
     width: 100%;
     background: $color-background-darker;
     padding: 60px 0;
-    cursor: pointer;
+
+    a {
+      color: $color-text;
+      transition: 0.2s;
+
+      &:hover {
+        text-decoration: none;
+        opacity: 0.5;
+      }
+    }
   }
 }

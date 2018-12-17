@@ -34,6 +34,18 @@
         </div>
       </div>
     </div>
+    <div class="index-mobile">
+      <div class="container">
+        <ul class="projects-list-mobile">
+          <li v-for="project in filteredList" :key="project.id">
+            <nuxt-link :to="'/project/' + project.slug">
+              <img class="project-thumbnail" :src="project.thumbnail.url">
+              <h3 class="project-title">{{ project.title }}</h3>
+            </nuxt-link>
+          </li>
+        </ul>
+      </div>
+    </div>
   </section>
 </template>
 

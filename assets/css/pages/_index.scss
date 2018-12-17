@@ -3,9 +3,14 @@
 section.index {
   .swiper-container {
     overflow: inherit;
+
+    @include responsive-below(sm) {
+      display: none;
+    }
   }
 
   .projects-list {
+
     .swiper-slide {
       width: 680px;
       max-width: 100%;
@@ -67,6 +72,10 @@ section.index {
     width: 100%;
     bottom: 30px;
     align-content: space-between;
+
+    @include responsive-below(sm) {
+      display: none;
+    }
 
     .left {
       width: 100%;
@@ -135,5 +144,36 @@ section.index {
         }
       }
     }
+  }
+
+  .index-mobile {
+    padding-top: 100px;
+    padding-bottom: 50px;
+
+    @include responsive-above(sm) {
+      display: none;
+    }
+
+    .projects-list-mobile {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        margin-bottom: 30px;
+
+        .project-thumbnail {
+          max-width: 100%;
+        }
+
+        .project-title {
+          font-size: 16px;
+          margin-top: 10px;
+          text-align: center;
+          color: $color-text;
+        }
+      }
+    }
+
   }
 }
