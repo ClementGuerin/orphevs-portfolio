@@ -11,7 +11,7 @@
                 <li>Type : {{ project.category }}</li>
                 <li>
                   <span>Date :</span>
-                  <span>{{ project.created_at }}</span>
+                  <span>{{ project.created }}</span>
                 </li>
               </ul>
             </div>
@@ -73,7 +73,7 @@ export default {
               title
               category
               description
-              created_at
+              created
               thumbnail {
                 url
               }

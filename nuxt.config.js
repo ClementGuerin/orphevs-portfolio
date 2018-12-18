@@ -69,9 +69,6 @@ module.exports = {
   plugins: [{
     src: '~/plugins/swiper.js',
     ssr: false
-  }, {
-    src: '~/plugins/moment.js',
-    ssr: false
   }],
   /*
    ** Build CSS/SCSS/SASS local files
@@ -80,27 +77,6 @@ module.exports = {
     'swiper/dist/css/swiper.css',
     '@/assets/css/main.scss'
   ],
-  /*
-   ** Build configuration
-   */
-  build: {
-    /*
-     ** Run ESLint on save
-     */
-    extend(config, {
-      isDev,
-      isClient
-    }) {
-      if (isDev && isClient) {
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        })
-      }
-    }
-  },
 
   env: {
     apiUrl: process.env.API_URL || 'https://orphevs-strapi.herokuapp.com'
