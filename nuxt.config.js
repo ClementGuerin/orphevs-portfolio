@@ -100,5 +100,9 @@ module.exports = {
         })
       }
     }
+  },
+
+  env: {
+    apiUrl: process.env.API_URL || 'https://orphevs-strapi.herokuapp.com'
   }
 }

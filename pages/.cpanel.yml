@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/orphevs2/public_html/
+    - /dist $DEPLOYPATH

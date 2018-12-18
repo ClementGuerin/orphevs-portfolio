@@ -11,7 +11,7 @@
                 <li>Type : {{ project.category }}</li>
                 <li>
                   <span>Date :</span>
-                  <span>{{ project.created_at | moment("MMMM YYYY") }}</span>
+                  <span>{{ project.created_at }}</span>
                 </li>
               </ul>
             </div>
@@ -34,7 +34,7 @@
 <script>
 import VueMarkdown from "vue-markdown";
 import Strapi from "strapi-sdk-javascript/build/main";
-const apiUrl = process.env.API_URL || "http://localhost:1337";
+const apiUrl = process.env.apiUrl;
 const strapi = new Strapi(apiUrl);
 export default {
   data() {
@@ -89,17 +89,6 @@ export default {
       }
     });
     response.data.projects.forEach(project => {
-      if (project.thumbnail) {
-        project.thumbnail.url = `${apiUrl}${project.thumbnail.url}`;
-      }
-      if (project.header) {
-        project.header.url = `${apiUrl}${project.header.url}`;
-      }
-      if (project.gallery) {
-        project.gallery.forEach(image => {
-          image.url = `${apiUrl}${image.url}`;
-        });
-      }
       store.commit("projects/add", {
         id: project.id || project._id,
         ...project

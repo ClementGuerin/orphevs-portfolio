@@ -9,7 +9,7 @@
 <script>
 import Strapi from "strapi-sdk-javascript";
 import contactForm from "~/components/contact-form";
-const apiUrl = process.env.API_URL || "http://localhost:1337";
+const apiUrl = process.env.apiUrl;
 const strapi = new Strapi(apiUrl);
 
 export default {

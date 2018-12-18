@@ -51,7 +51,7 @@
 
 <script>
 import Strapi from "strapi-sdk-javascript/build/main";
-const apiUrl = process.env.API_URL || "http://localhost:1337";
+const apiUrl = process.env.apiUrl;
 const strapi = new Strapi(apiUrl);
 export default {
   data() {
@@ -167,7 +167,6 @@ export default {
       }
     });
     response.data.projects.forEach(project => {
-      project.thumbnail.url = `${apiUrl}${project.thumbnail.url}`;
       store.commit("projects/add", {
         id: project.id || project._id,
         ...project
